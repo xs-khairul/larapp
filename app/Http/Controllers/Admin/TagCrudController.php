@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Admin;
 
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use App\Http\Requests\TagRequest;
+use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
+
 
 class TagCrudController extends CrudController
 {
@@ -20,13 +22,42 @@ class TagCrudController extends CrudController
         $this->crud->setFromDb();
     }
 
+
+    protected function setupListOperation()
+    {
+        CRUD::addColumn('name');
+        CRUD::addColumn('slug');
+
+        // dd(backpack_user()->can(config('permission.edit')));
+
+if (!backpack_user()->can(config('permission.edit'))) {
+    CRUD::removeButton('show');
+    CRUD::removeButton('reorder');
+}
+
+// if (!backpack_user()->can(config('permission.delete'))) {
+//     CRUD::removeButton('delete');
+// }
+
+// if (!backpack_user()->can(config('permission.view'))) {
+//     CRUD::removeButton('preview');
+// }
+
+    }
+
+
+
+
+       
+
+
     protected function setupCreateOperation()
     {
-        $this->crud->setValidation(TagRequest::class);
+        // $this->crud->setValidation(TagRequest::class);
     }
 
     protected function setupUpdateOperation()
     {
-        $this->crud->setValidation(TagRequest::class);
+        // $this->crud->setValidation(TagRequest::class);
     }
 }

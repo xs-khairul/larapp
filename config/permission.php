@@ -2,6 +2,13 @@
 
 return [
 
+    'add' => env('ADD_PERMISSION', 'add'),
+    'edit' => env('EDIT_PERMISSION', 'edit'),
+    'view' => env('VIEW_PERMISSION', 'view'),
+    'delete' => env('DELETE_PERMISSION', 'delete'),
+    'delete_soft' => env('DELETE_SOFT_PERMISSION', 'delete_soft'),
+
+
     'models' => [
 
         /*

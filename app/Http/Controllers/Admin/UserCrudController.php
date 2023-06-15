@@ -13,6 +13,7 @@ use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
  */
 class UserCrudController extends CrudController
 {
+    
     use \Backpack\CRUD\app\Http\Controllers\Operations\ListOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\CreateOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\UpdateOperation;
@@ -26,9 +27,13 @@ class UserCrudController extends CrudController
      */
     public function setup()
     {
+        
+
         CRUD::setModel(\App\Models\User::class);
         CRUD::setRoute(config('backpack.base.route_prefix') . '/user');
         CRUD::setEntityNameStrings('user', 'users');
+        
+
     }
 
     /**
@@ -42,6 +47,22 @@ class UserCrudController extends CrudController
         CRUD::column('name');
         CRUD::column('email');
         CRUD::column('password');
+
+       dd(backpack_user()->can(config('permission.edit')));
+
+        // if (!backpack_user()->can(config('permission.edit'))) {
+        //     CRUD::removeButton('edit');
+        //     CRUD::removeButton('reorder');
+        // }
+
+        // if (!backpack_user()->can(config('permission.delete'))) {
+        //     CRUD::removeButton('delete');
+        // }
+
+        // if (!backpack_user()->can(config('permission.view'))) {
+        //     CRUD::removeButton('preview');
+        // }
+
 
         /**
          * Columns can be defined using the fluent syntax or array syntax:
@@ -58,6 +79,15 @@ class UserCrudController extends CrudController
      */
     protected function setupCreateOperation()
     {
+
+        dd(backpack_user()->can(config('permission.edit')));
+
+
+        if (!backpack_user()->can((config('permission.add')))) {
+            return abort(403);
+        }
+
+
         CRUD::setValidation(UserRequest::class);
 
         CRUD::field('name');
@@ -71,6 +101,13 @@ class UserCrudController extends CrudController
          */
     }
 
+    protected function setupDeleteOperation()
+    {
+        if (!backpack_user()->can((config('permission.delete')))) {
+            return abort(403);
+        }
+    }
+
     /**
      * Define what happens when the Update operation is loaded.
      * 
@@ -79,6 +116,10 @@ class UserCrudController extends CrudController
      */
     protected function setupUpdateOperation()
     {
+        if (!backpack_user()->can((config('permission.edit')))) {
+            return abort(403);
+        }
+
         $this->setupCreateOperation();
     }
 }

@@ -37,6 +37,11 @@ class CategoryCrudController extends CrudController
                 },
             ],
         ]);
+
+        dd(backpack_user()->can(config('permission.edit')));
+
+       
+
     }
 
     protected function setupShowOperation()
